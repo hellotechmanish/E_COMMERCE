@@ -4,50 +4,80 @@ const jwt = require('jsonwebtoken'); // jwt for generating tokens
 
 exports.signup = async (req, res) => {
     const { username, email, password } = req.body;
-    // console.log(username);
-
-    // Check if user already exists (either by username or email)
-    let user = await User.findOne({ $or: [{ email }, { username }] });
-    if (user) {
-        return res.status(400).json({ msg: 'User already exists' });
-    }
 
     try {
-        // Hash the password before saving
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        // Check if user already exists
+        let user = await User.findOne({ $or: [{ email }, { username }] });
+        if (user) return res.status(400).json({ msg: 'User already exists' });
 
-        // Create new user instance with hashed password
-        user = new User({ username, email, password: hashedPassword });
+        // Create and save new user (password will be hashed by middleware)
+        user = new User({ username, email, password });
         await user.save();
 
-        // Generate JWT token for user authentication
-        const token = jwt.sign(
-            { userId: user._id },
-            'yourSecretKey', // Use environment variable for secret key
-            { expiresIn: '1h' }
-        );
-
-        // Send success response with token and user data
+        // Send success response with user data
         res.status(201).json({
             status: 200,
             message: 'User created successfully!',
-            // token: token,
             user: {
                 userId: user._id,
                 username: user.username,
                 email: user.email,
-                createdAt: user.createdAt
+                createdAt: user.createdAt,
             }
         });
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ msg: 'Server Error', error: err.message });
+        res.status(500).json({
+            status: 500,
+            message: 'Internal Server Error',
+            error: err.message,
+        });
     }
 };
 
 
-exports.login = (req, res) => {
-    // Login logic
+
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+    console.log(email, password);
+
+    try {
+        // Check if the user exists in the database
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({
+                status: 404,
+                message: 'User not found',
+            });
+        }
+
+        // Compare the provided password with the hashed password using the comparePassword method
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({
+                status: 401,
+                message: 'Invalid email or password',
+            });
+        }
+
+        // Generate JWT token using the generateAuthToken method
+        const token = user.generateAuthToken();
+
+        // Send success response
+        res.status(200).json({
+            status: 200,
+            message: 'Login successful',
+            username: user.username,
+            // token: token,
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            status: 500,
+            message: 'Server error',
+            error: err.message,
+        });
+    }
 };
