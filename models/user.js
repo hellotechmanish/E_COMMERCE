@@ -47,5 +47,14 @@ userSchema.methods.generateAuthToken = function () {
     return jwt.sign(payload, secretKey, options);  // Generate and return the token
 };
 
+const isTokenBlacklisted = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (blacklist.has(token)) {
+        return res.status(401).json({ message: 'Unauthorized: Token has been invalidated' });
+    }
+    next();
+};
+
+
 // Create the model and export it
 module.exports = mongoose.model('User', userSchema);

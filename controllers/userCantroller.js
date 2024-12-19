@@ -81,3 +81,18 @@ exports.login = async (req, res) => {
         });
     }
 };
+
+const blacklist = new Set(); // Example: You can use Redis or a database for production
+
+exports.logout = (req, res) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (token) {
+        blacklist.add(token); // Add token to the blacklist
+    }
+    res.status(200).json({
+        status: 200,
+        message: "Logged out successfully!"
+    });
+};
+
+
