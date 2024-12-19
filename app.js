@@ -33,9 +33,9 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api', userRoutes);
-app.use('/api', orderRoutes);
-app.use('/api', productRoutes);
+app.use('/user', userRoutes);
+app.use('/order', orderRoutes);
+app.use('/product', productRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

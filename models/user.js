@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema({
         required: true,  // Password is required
         minlength: [6, 'Password should be at least 6 characters long'],  // Password length validation
     },
+    resetPasswordToken: {
+        type: String,    // This will store the reset token (hashed version)
+    },
+    resetPasswordExpires: {
+        type: Date,      // This will store the expiry date of the token
+    },
     createdAt: {
         type: Date,
         default: Date.now,  // Set creation date by default

@@ -1,6 +1,9 @@
 # Node modules
 /node_modules/
 
+# Environment files
+.env
+
 # Logs
 *.log
 
@@ -14,8 +17,6 @@ yarn-error.log*
 /build
 /public
 
-# Environment files
-.env
 
 # OS-specific files
 .DS_Store
