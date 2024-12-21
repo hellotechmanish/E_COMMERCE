@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
         required: true,  // Password is required
         minlength: [6, 'Password should be at least 6 characters long'],  // Password length validation
     },
+    role: {
+        type: String,
+        enum: ['admin', 'user'], // Define roles
+        default: 'user', // Default role is "user"
+    },
     resetPasswordToken: {
         type: String,    // This will store the reset token (hashed version)
     },

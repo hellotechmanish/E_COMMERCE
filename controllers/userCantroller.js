@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 
 
 exports.signup = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, role } = req.body;
 
     try {
         // Check if user already exists
@@ -14,7 +14,7 @@ exports.signup = async (req, res) => {
         if (user) return res.status(400).json({ msg: 'User already exists' });
 
         // Create and save new user (password will be hashed by middleware)
-        user = new User({ username, email, password });
+        user = new User({ username, email, password, role: role || 'user' });
         await user.save();
 
         // Send success response with user data
@@ -25,6 +25,7 @@ exports.signup = async (req, res) => {
                 userId: user._id,
                 username: user.username,
                 email: user.email,
+                role: user.role,
                 createdAt: user.createdAt,
             }
         });
