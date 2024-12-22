@@ -52,7 +52,7 @@ userSchema.methods.comparePassword = function (password) {
 
 // Method to generate a JWT token
 userSchema.methods.generateAuthToken = function () {
-    const payload = { userId: this._id, username: this.username };  // Payload data for the token
+    const payload = { userId: this._id, username: this.username, role: this.role };  // Payload data for the token
     const secretKey = process.env.JWT_SECRET || 'your_secret_key'; // Secret key for encoding the token
     const options = { expiresIn: '1h' };  // Token expiration time
     return jwt.sign(payload, secretKey, options);  // Generate and return the token
