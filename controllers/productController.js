@@ -1,7 +1,7 @@
 const Product = require('../models/Product');
 
 // Function to get all products
-exports.getProducts = async (req, res) => {
+exports.getAllProducts = async (req, res) => {
     try {
         // Fetch all products from the database
         const products = await Product.find();
@@ -34,6 +34,26 @@ exports.getProducts = async (req, res) => {
         });
     }
 };
+
+exports.getProductById = async (req, res) => {
+    const productId = req.params.id;
+    console.log(productId);
+    try {
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({
+            message: 'Product fetched successfully',
+            data: product
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+};
+
 
 // Function to add a new product
 exports.addProduct = async (req, res) => {
@@ -77,4 +97,54 @@ exports.addProduct = async (req, res) => {
             error: err.message
         });
     }
+};
+exports.editProduct = async (req, res) => {
+    const { name, price, description, stock } = req.body;
+    const productId = req.params.id;
+    try {
+        const product = await Product.findById(productId);
+        // console.log(product);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        // Update fields
+        product.name = name || product.name;
+        product.price = price || product.price;
+        product.description = description || product.description;
+        product.stock = stock || product.stock;
+
+        const updatedProduct = await product.save();
+
+        res.status(200).json({
+            message: 'Product updated successfully',
+            product: updatedProduct
+        });
+
+
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+
+};
+exports.deleteproduct = async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await Product.findById(productId);
+        // console.log(product);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        await Product.deleteOne({ _id: productId });
+
+        res.status(200).json({
+            message: 'Product deleted successfully',
+            product: productId
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+
 };
