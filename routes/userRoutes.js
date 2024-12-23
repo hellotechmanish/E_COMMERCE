@@ -2,13 +2,15 @@
 const express = require('express');
 const router = express.Router();
 // const { authMiddleware, rolecheck } = require("../middlewares/authMiddleware")
-const { home, getAllProducts, getProductById, signup, login, logout, forgotPassword, resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
+const { home, getAllProducts, getProductById,
+    signup, login, logout, forgotPassword,
+    resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
 
 // user Routes define yaisa karta hai 
 
 router.get('/', home);
 router.get('/products', getAllProducts);
-router.get('/products/:id', getProductById);
+// router.get('/products/:id', getProductById);
 // router.get('/profile', profile)
 // router.get('/cart', cart)
 // router.get('/wishlist', wishlist)
