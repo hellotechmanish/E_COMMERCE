@@ -1,10 +1,22 @@
 // this is all of the imorted file...
 const express = require('express');
 const router = express.Router();
-const { signup, login, logout, forgotPassword, resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
 const { authMiddleware, rolecheck } = require("../middlewares/authMiddleware")
+const { home, getAllProducts, getProductById, signup, login, logout, forgotPassword, resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
 
-// Routes define yaisa karta hai 
+// user Routes define yaisa karta hai 
+
+router.get('/', home);
+router.get('/products', getAllProducts);
+router.get('/products/:id', getProductById);
+// router.get('/profile', profile)
+// router.get('/cart', cart)
+// router.get('/wishlist', wishlist)
+// router.get('/checkout', checkout)
+// router.get('/order/success', success)
+// router.get('/profile/orders', orders)
+// router.get('/profile/orders/track/:id', track)
+
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/logout', logout);

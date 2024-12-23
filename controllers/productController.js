@@ -54,7 +54,6 @@ exports.getProductById = async (req, res) => {
     }
 };
 
-
 // Function to add a new product
 exports.addProduct = async (req, res) => {
     const { name, price, description, stock } = req.body;

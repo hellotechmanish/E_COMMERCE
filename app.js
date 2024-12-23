@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/user', userRoutes);
+app.use('/user/home', userRoutes);
 app.use('/order', orderRoutes);
 app.use('/product', productRoutes);
 
