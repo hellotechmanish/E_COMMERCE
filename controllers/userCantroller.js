@@ -4,6 +4,7 @@ const randomstring = require('randomstring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 
 exports.home = async (req, res) => {
@@ -147,12 +148,18 @@ exports.login = async (req, res) => {
 const blacklist = new Set(); // Example: You can use Redis or a database for production
 exports.logout = (req, res) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
+    // Decode the token to get user information
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (token) {
         blacklist.add(token); // yaha token ko distroy kar raha  hai  taki user ka information khatam jaye "logout" 
     }
     res.status(200).json({
         status: 200,
         message: "Logged out successfully!",
+        user: {
+            id: decoded.id,
+            username: decoded.username
+        }
 
     });
 };
@@ -245,6 +252,34 @@ exports.resetPassword = async (req, res) => {
             error: err.message,
         });
     }
+};
+exports.profile = async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'user not found' });
+        }
+
+        res.status(200).json({
+            message: 'Welcome to your profile',
+            user: {
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+
+
+    }
+
+
+
 };
 
 
