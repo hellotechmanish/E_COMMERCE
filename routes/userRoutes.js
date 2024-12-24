@@ -1,8 +1,8 @@
 // this is all of the imorted file...
 const express = require('express');
 const router = express.Router();
-// const { authMiddleware, rolecheck } = require("../middlewares/authMiddleware")
-const { home, getAllProducts, getProductById,
+const { authMiddleware, rolecheck } = require("../middlewares/authMiddleware")
+const { home, getAllProducts, getProductById, profile,
     signup, login, logout, forgotPassword,
     resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
 
@@ -10,8 +10,8 @@ const { home, getAllProducts, getProductById,
 
 router.get('/', home);
 router.get('/products', getAllProducts);
-// router.get('/products/:id', getProductById);
-// router.get('/profile', profile)
+router.get('/products/:id', getProductById);
+router.get('/profile', authMiddleware, profile)
 // router.get('/cart', cart)
 // router.get('/wishlist', wishlist)
 // router.get('/checkout', checkout)
