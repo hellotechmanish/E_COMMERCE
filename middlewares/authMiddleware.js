@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const blacklist = new Set();  // Token blacklist
 
 
 
@@ -41,6 +42,15 @@ exports.authMiddleware = (req, res, next) => {
 
 };
 
+// ye check karege ki token expire toh nhi 
+exports.isTokenBlacklisted = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (blacklist.has(token)) {
+        return res.status(401).json({ message: 'Unauthorized: Token has been invalidated' });
+    }
+    next();
+};
+
 
 // rolecheck - Role-based access control
 exports.rolecheck = (roles) => {
@@ -60,3 +70,5 @@ exports.rolecheck = (roles) => {
 
 
 
+// Blacklist ko export karna (logout ke liye)
+exports.blacklist = blacklist;

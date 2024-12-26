@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { blacklist } = require("../middlewares/authMiddleware");
 
 
 exports.home = async (req, res) => {
@@ -145,23 +146,36 @@ exports.login = async (req, res) => {
     }
 };
 
-const blacklist = new Set(); // Example: You can use Redis or a database for production
+// const blacklist = new Set(); // Example: You can use Redis or a database for production
 exports.logout = (req, res) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    // Decode the token to get user information
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (token) {
-        blacklist.add(token); // yaha token ko distroy kar raha  hai  taki user ka information khatam jaye "logout" 
-    }
-    res.status(200).json({
-        status: 200,
-        message: "Logged out successfully!",
-        user: {
-            id: decoded.id,
-            username: decoded.username
+    try {
+        const token = req.header('Authorization')?.replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({ message: "No token provided" });
         }
 
-    });
+        // Verify the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Add token to blacklist
+        blacklist.add(token);
+
+        res.status(200).json({
+            status: 200,
+            message: "Logged out successfully!",
+            user: {
+                id: decoded.userId,
+                username: decoded.username
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: 400,
+            message: "Invalid or expired token",
+            error: err.message
+        });
+    }
 };
 
 // Step 1: Send Password Reset Email
