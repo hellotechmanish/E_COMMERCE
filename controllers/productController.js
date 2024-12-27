@@ -97,6 +97,7 @@ exports.addProduct = async (req, res) => {
         });
     }
 };
+// Function to edit product
 exports.editProduct = async (req, res) => {
     const { name, price, description, stock } = req.body;
     const productId = req.params.id;
@@ -125,6 +126,7 @@ exports.editProduct = async (req, res) => {
     }
 
 };
+// Function to delete product
 exports.deleteproduct = async (req, res) => {
     const productId = req.params.id;
     try {
@@ -139,7 +141,11 @@ exports.deleteproduct = async (req, res) => {
 
         res.status(200).json({
             message: 'Product deleted successfully',
-            product: productId
+            product: {
+                "productId": product.productId,
+                "product": product.product
+            },
+
         });
 
     } catch (err) {
