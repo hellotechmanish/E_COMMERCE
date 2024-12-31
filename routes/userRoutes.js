@@ -6,13 +6,18 @@ const { home, getAllProducts, getProductById, profile,
     signup, login, logout, forgotPassword,
     resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
 
+// Import Route
+const cartRoutes = require('./cartRoutes');
+
 // user Routes define yaisa karta hai 
 
 router.get('/', home);
 router.get('/products', getAllProducts);
 router.get('/products/:id', getProductById);
 router.get('/profile', isTokenBlacklisted, authMiddleware, profile);
-// router.get('/cart', cart)
+
+router.use('/cart', authMiddleware, cartRoutes)    //this is diff route
+
 // router.get('/wishlist', wishlist)
 // router.get('/checkout', checkout)
 // router.get('/order/success', success)
