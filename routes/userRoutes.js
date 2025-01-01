@@ -4,7 +4,7 @@ const router = express.Router();
 const { authMiddleware, isTokenBlacklisted } = require("../middlewares/authMiddleware")
 const { home, getAllProducts, getProductById, profile,
     signup, login, logout, forgotPassword,
-    resetPassword } = require('../controllers/userCantroller'); // Functions ko correctly import karo
+    resetPassword, wishlist } = require('../controllers/userCantroller'); // Functions ko correctly import karo
 
 // Import Route
 const cartRoutes = require('./cartRoutes');
@@ -18,7 +18,7 @@ router.get('/profile', isTokenBlacklisted, authMiddleware, profile);
 
 router.use('/cart', authMiddleware, cartRoutes)    //this is diff route
 
-// router.get('/wishlist', wishlist)
+router.get('/wishlist', wishlist)
 // router.get('/checkout', checkout)
 // router.get('/order/success', success)
 // router.get('/profile/orders', orders)
