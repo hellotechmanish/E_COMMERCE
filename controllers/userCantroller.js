@@ -295,5 +295,20 @@ exports.profile = async (req, res) => {
 
 
 };
+exports.wishlist = async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+
+
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+
+
+    }
+
+
+
+};
 
 
