@@ -5,20 +5,7 @@ const blacklist = new Set();  // Token blacklist
 
 // authMiddleware - Token validation
 exports.authMiddleware = (req, res, next) => {
-    // const authHeader = req.header('Authorization');  // Token ko Authorization header se lena
-
-    // const token = authHeader.split(' ')[1];
-    // if (!token) return res.status(401).send('Access Denied');  // Agar token nahi hai, toh "Access Denied"
-
-    // try {
-    //     const verified = jwt.verify(token, process.env.JWT_SECRET);  // Token verify karna
-    //     req.user = verified;  // Verified user ka data req.user mein set karna
-    //     next();  // Agle middleware ko call karna
-    // } catch (err) {
-    //     res.status(400).send('Invalid Token');  // Agar token invalid ho, toh error dena
-    // }
-
-    const authHeader = req.header('Authorization');
+    const authHeader = req.header('Authorization'); //header se token lana h
 
     // Check if Authorization header is missing
     if (!authHeader) {
