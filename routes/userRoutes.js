@@ -9,6 +9,7 @@ const { home, getAllProducts, getProductById, profile,
 // Import Route
 const cartRoutes = require('./cartRoutes');
 const wishlistRoutes = require('./wishlistRoutes');
+const checkout = require('../controllers/checkoutController');
 
 
 // user Routes define yaisa karta hai 
@@ -21,11 +22,11 @@ router.get('/profile', isTokenBlacklisted, authMiddleware, profile);
 router.use('/cart', authMiddleware, cartRoutes)
 router.use('/wishlist', authMiddleware, wishlistRoutes)
 
-// router.get('/checkout', checkout)
 // router.get('/order/success', success)
 // router.get('/profile/orders', orders)
 // router.get('/profile/orders/track/:id', track)
 
+router.post('/checkout', authMiddleware, checkout);
 router.post('/signup', signup);
 router.post('/login', login);
 router.post('/logout', logout);
