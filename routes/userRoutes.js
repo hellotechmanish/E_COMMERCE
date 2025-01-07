@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { authMiddleware, isTokenBlacklisted } = require("../middlewares/authMiddleware")
 const { home, getAllProducts, getProductById, profile, signup, login, logout, forgotPassword, resetPassword } = require('../controllers/userCantroller');
-const { checkout } = require('../controllers/checkoutController');
+const { checkout, success } = require('../controllers/checkoutController');
 
 // Import Route
 const cartRoutes = require('./cartRoutes');
@@ -19,9 +19,9 @@ router.get('/profile', isTokenBlacklisted, authMiddleware, profile);
 //this is diff route
 router.use('/cart', authMiddleware, cartRoutes)
 router.use('/wishlist', authMiddleware, wishlistRoutes)
-router.post('/checkout', authMiddleware, checkout);
 
-// router.get('/order/success', success)
+router.post('/checkout', authMiddleware, checkout);
+router.get('/order/success', success)
 // router.get('/profile/orders', orders)
 // router.get('/profile/orders/track/:id', track)
 
